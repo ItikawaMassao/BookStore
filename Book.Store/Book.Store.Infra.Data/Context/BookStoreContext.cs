@@ -6,13 +6,14 @@ using System.Linq;
 
 namespace Book.Store.Infra.Data.Context
 {
-    public class BookStoreContext : DbContext
+    public sealed class BookStoreContext : DbContext
     {
-        public IDbSet<BsLivro> Livros;
+        public IDbSet<BsLivro> Livros { get; private set; }
 
         public BookStoreContext()
             : base("BookStoreDBConnection")
         {
+            Livros = Set<BsLivro>();
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

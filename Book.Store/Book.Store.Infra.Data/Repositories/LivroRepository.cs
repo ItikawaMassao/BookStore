@@ -1,32 +1,36 @@
 ﻿using Book.Store.Domain.Entities;
 using Book.Store.Domain.Interfaces.Repositories;
-using System;
+using Book.Store.Infra.Data.Context;
 using System.Collections.Generic;
 using System.Linq;
-using Book.Store.Infra.Data.Context;
 
 namespace Book.Store.Infra.Data.Repositories
 {
     public class LivroRepository : RepositoryBase<BsLivro>, ILivroRepository
     {
+        private IEnumerable<BsLivro> ListaLivrosAtivos()
+        {
+            return DbBookStoreContext.Livros.Where(e => e.Ativo);
+        }
+
         public IEnumerable<BsLivro> ListarTodosOrdenadoPorNome()
         {
-            return GetAllSorted(new Func<BsLivro, string>(e => e.Nome));
+            return ListaLivrosAtivos().OrderBy(e => e.Nome);
         }
 
         public IEnumerable<BsLivro> ListarTodosOrdenadoPorAutor()
         {
-            return GetAllSorted(new Func<BsLivro, string>(e => e.Autor));
+            return ListaLivrosAtivos().OrderBy(e => e.Autor);
         }
 
         public IEnumerable<BsLivro> ObterLivrosPorNome(string nome)
         {
-            return DbBookStoreContext.Livros.Where(livro => livro.Nome.Contains(nome));
+            return ListaLivrosAtivos().Where(livro => livro.Nome.Contains(nome));
         }
 
         public IEnumerable<BsLivro> ObterLivrosPorAutor(string autor)
         {
-            return DbBookStoreContext.Livros.Where(livro => livro.Autor.Contains(autor));
+            return ListaLivrosAtivos().Where(livro => livro.Autor.Contains(autor));
         }
 
         public LivroRepository(BookStoreContext bookStoreDbContext)
