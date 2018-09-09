@@ -1,0 +1,69 @@
+﻿@using System.Web.Mvc.Html
+@using Book.Store.MVC.ViewModels.Livros
+@model IEnumerable<LivroViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Livros</title>
+</head>
+<body class="clearfix">
+    <h2>Listagem dos livros disponíveis</h2>
+    <hr />
+    <div class="row ">
+        <div class="form-group pull-right">
+            @Html.ActionLink("Incluir livro", "Create", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+    <div class="row table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-5">
+                        @Html.DisplayNameFor(model => model.Nome)
+                    </th>
+                    <th class="col-md-4">
+                        @Html.DisplayNameFor(model => model.Autor)
+                    </th>
+                    <th class="col-md-3">
+                        Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var livro in Model)
+                    {
+                        <tr>
+                            <td class="col-md-4">
+                                @Html.DisplayFor(modelItem => livro.Nome)
+                            </td>
+                            <td class="col-md-4">
+                                @Html.DisplayFor(modelItem => livro.Autor)
+                            </td>
+                            <td class="col-md-4">
+                                @Html.ActionLink("Editar", "Edit", new { id = livro.Id }, new { @class = "btn btn-sm btn-primary" })
+                                @Html.ActionLink("Detalhes", "Details", new { id = livro.Id }, new { @class = "btn btn-sm btn-default" })
+                                @Html.ActionLink("Excluir", "Delete", new { id = livro.Id }, new { @class = "btn btn-sm btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <span>Nenhum livro encontrado</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
